@@ -72,6 +72,11 @@ footer p + p { margin-top: 6px; }
   h2 { font-size: 1.6rem; }
 }
 
+/* Компактная шапка на мобильных */
+@media (max-width: 600px) {
+  header { position: static; }
+  nav a { padding: 8px 4px; }
+}
 /* Фотографии */
 .card img { width: 100%; height: 170px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; display: block; }
 .interior { padding: 0; }
