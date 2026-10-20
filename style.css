@@ -71,3 +71,9 @@ footer p + p { margin-top: 6px; }
   section { padding: 50px 0; }
   h2 { font-size: 1.6rem; }
 }
+
+/* Компактная шапка на мобильных */
+@media (max-width: 600px) {
+  header { position: static; }
+  nav a { padding: 8px 4px; }
+}
