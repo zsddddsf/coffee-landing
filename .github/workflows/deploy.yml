@@ -1,0 +1,50 @@
+# Workflow автоматической проверки и публикации сайта на GitHub Pages.
+# Файл размещается в репозитории по пути: .github/workflows/deploy.yml
+
+name: Deploy static site
+
+# Триггер: запуск при каждом push в ветку main (и вручную)
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Права, необходимые для публикации на GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Задание 1: проверка качества HTML перед публикацией (линтинг)
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Lint HTML
+        run: npx --yes htmlhint index.html
+      - name: Check that images exist
+        run: |
+          ls images/*.svg
+          test -f style.css && test -f main.js
+
+  # Задание 2: публикация сайта (выполняется только после успешной проверки)
+  deploy:
+    needs: lint
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
